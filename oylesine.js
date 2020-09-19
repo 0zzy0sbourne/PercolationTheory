@@ -1,8 +1,10 @@
-let width = 600; 
-let height = 600;
+let width = 1000; 
+let height = 1000;
 let colNum = 20 ; 
+let gridWidth = 600; 
+let gridHeight = 600; 
 class Queue {
-    constructor(){// send our grid as parameter
+    constructor(){
         this.queue = []; 
     }
     enqueue = (cell) => {
@@ -35,9 +37,6 @@ function Cell(i,j , height , width , color) {
     this.cellHeight = height;  
     this.x = j; // num from left 
     this.y = i; // num from top 
-    this.connectedLimeCells = []; 
-    this.connectedBlocks = []; 
-    this.connectedOpenWhites = []; 
     this.neighbors = [] ; 
   
     this.show = () => { // INITIAL GRID CONSISTS OF CLOSED AND OPEN SITES ONLY
@@ -112,28 +111,38 @@ class Grid  {
         visited.push(toprow[startingCellindex]); 
         queue.enqueue(toprow[startingCellindex]); // picking a random red block from the top row .
         subgraph.push(toprow[startingCellindex]); 
-        while(visited.length < this.siteNum) // THIS IS WRONG!!!!!!!!!*****************************************************************
-        {   let neighborsListLength = queue.front().neighbors.length ; 
+        
+        while(!queue.isEmpty())
+        {
+            let neighborsListLength = queue.front().neighbors.length ; 
             for(var i = 0;i<neighborsListLength;i++)
             {
-                if(queue.front().neighbors[i].x === 19) // if any of the child is on the bottom return true(it percolates)
-                {
-                    return true ; 
-                }
-                if(visited.includes(queue.front().neighbors[i]))// do nothing if visited is contains the child because it is the parent of current node .
-                {
-            
-                }
-                else if(!visited.includes(queue.front().neighbors[i]))
-                {
-                    visited.push(queue.front().neighbors[i]);
-                    queue.enqueue(queue.front().neighbors[i]) ;
-                }
+                    if(queue.front().neighbors[i].cellColor === 4 ) 
+                    {
+                        queue.enqueue(queue.front().neighbors[i]); 
+                        if(!visited.includes(queue.front().neighbors[i]))
+                        {
+                            visited.push(queue.front().neighbors[i]);
+                        }
+                        else {
+    
+                        }
+                        if(queue.front().neighbors[i].y === 19 )
+                        {
+                            return true ; 
+                        }
+                    }
+                    else {
+    
+                    }
+                    
+                   
             }
-            
-            queue.dequeue(); // delete the parent which  all the childs of it has bee traversed.
-            
-        }
+                
+                queue.dequeue(); // delete the parent which  all the childs of it has bee traversed.
+
+        }   
+
         return false ; 
             
     }
@@ -182,7 +191,6 @@ class Grid  {
                     }   
                    
                 }
-                
                 else if(this.rects[i][j].cellColor === 3)
                 {
                     for(var k = 0;k<this.rects[i][j].neighbors.length;k++)
@@ -210,12 +218,15 @@ class Grid  {
     
   
 };
-let grid = new Grid(colNum , width, height);
+let grid = new Grid(colNum , gridWidth, gridHeight);
 function setup()
 {
-    createCanvas(width , height) ;
     
-    //TODO : // FILL THE NEIGHBORS LIST FOR EACH CELL.
+    createCanvas(width , height) ;
+    background(255, 204, 0); 
+    
+    
+    //////////////////////////////////////////////////////////////
     for(var i= 0;i<grid.dimensionSize ; i++)
     {
         for(var j = 0; j<grid.dimensionSize;j++)
@@ -242,8 +253,16 @@ function setup()
     //TODO  : CHECK FOR CONNECTED COLOURFUL CELLS AND WHITE CELLS . 
 
    let randColourfulIndex = Math.floor(Math.random() * (grid.dimensionSize-1)); 
-   grid.rects[0][randColourfulIndex].cellColor = 4 ; 
-    grid.connectNeighbor(); 
+   grid.rects[0][randColourfulIndex].cellColor = 4 ;     
+
+    ///////////////////////////////////////////////////////////////////////
+}
+
+function draw()
+{
+    textSize(32);
+    text('Threshold:'+ grid.openSiteNum, 700 ,700); 
+    fill(255,0,0); 
     for(var i = 0; i<grid.dimensionSize;i++)
     {
         for(var j = 0;j<grid.dimensionSize; j++)
@@ -251,10 +270,11 @@ function setup()
             grid.rects[i][j].show(); 
         }
     }
-}
+///////////////////////////////////////////////////////////////////////7
 
-function draw()
-{
+    grid.connectNeighbor(); 
+   
+    //////////////////////////////////////////////////////////////////////////////////7
     if(!grid.doesPercolate())
     {
         grid.deleteBlock();  
@@ -276,6 +296,7 @@ function draw()
     }
     else if(grid.doesPercolate())
     {    
+        
         for(var i = 0;i<grid.dimensionSize;i++)
         {
             for(var j = 0;j<grid.dimensionSize;j++)
@@ -284,6 +305,7 @@ function draw()
             }            
         }
         console.log(grid.threshold()); 
+       
         console.log("Grid Percolates!"); 
         return ; 
     }
