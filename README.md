@@ -17,4 +17,7 @@ By repeating this computation experiment T times and averaging the results, we o
 provides an estimate of the __Percolation Threshold__; the sample standard deviation __s__; measures the __sharpness of the threshold__. 
 <br /> 
 Finally we can find the __Confidence Interval__ and plot the threshold function as __Sigmoid Function__ .
-
+<br /> 
+<br /> 
+# Further Improvements 
+In addition to this process, as we plot the sigmoid function, this function can be used to __make prediction__ if grid does percolate or not by __logistic regression__.
