@@ -1,4 +1,4 @@
-# PercolationTheory
+# Percolation Theory
 Percolation Theory is a problem under the __Graph Theory__ researches. <br /> 
 In statistical physics and mathematics, percolation theory describes the behavior of a network when nodes or links are removed.
 <br /> 
